@@ -1,3 +1,46 @@
+<?php session_start(); ?>
+<?php
+    //Get questions
+    include('dbconfig.php');
+    $id = $_GET['id_questions'];
+    $result = mysqli_query($con,"SELECT phrase FROM questions WHERE id_questions = '$id'");
+    //$row = mysqli_fetch_assoc($result);
+    //$title = $row['phrase'];
+   
+    //Create a funtion or if to run random question
+    //$res = $con->query("SELECT id_questions FROM questions ORDER BY rand() LIMIT 10")
+    $sql = mysqli_query($con, "SELECT count(id_questions) FROM questions");  
+    $random = rand(0, $sql);
+    $sql1 = "SELECT * FROM questions WHERE id_questions = '$random'";
+    $resultRandom = mysqli_query($con,$sql1);
+    $row = mysqli_fetch_assoc($resultRandom);
+    $title = $row['phrase'];
+        /*$questions = array();
+        $questions_ids = array();
+        while($r = $res->fetch_assoc($result))
+        {
+            $questions[] = $r;
+            $questions_ids = $r[$id];
+            $title = $questions_ids['phrase'];
+        }*/
+   
+
+    //Get options A B C
+    //A URL:http://localhost:8888/fullstack/quiz.php?id_questions=1
+    $result1 = mysqli_query($con, "SELECT option1 FROM questions WHERE id_questions = '$id'");
+    $row1 = mysqli_fetch_assoc($result1);
+    $option1 = $row1['option1'];
+    //B
+    $result2 = mysqli_query($con, "SELECT option2 FROM questions WHERE id_questions = '$id'");
+    $row2 = mysqli_fetch_assoc($result2);
+    $option2 = $row2['option2'];
+    //c
+    $result3 = mysqli_query($con, "SELECT option3 FROM questions WHERE id_questions = '$id'");
+    $row3 = mysqli_fetch_assoc($result3);
+    $option3 = $row3['option3'];
+   
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -135,11 +178,6 @@
         
     </head>
     <body>
-    <!--<?php
-        include'questions.php';
-        %db = mew Quiz();
-        $question = $db->get_questions();
-    ?>-->
         <link href="https://fonts.googleapis.com/css?family=Jo+Sans:400,600" rel="stylesheet">
         <!--Header section-->
         <form action="reponses.php" method="post">
@@ -162,10 +200,10 @@
 
         <!--Quiz section-->
         <div class="section-quiz">
-            <div class="question" name="question"><?=$title?></div>
-            <div class="selection" id="selection-a" name="option1">(A)</div>
-            <div class="selection" id="selection-b" name="option2">(B)</div>
-            <div class="selection" id="selection-c" name="option3">(C)</div>
+            <div class="question" name="question"><?= $title;?></div>
+            <div class="selection" id="selection-a" name="option1">(A)<?= $option1?></div>
+            <div class="selection" id="selection-b" name="option2">(B)<?= $option2?></div>
+            <div class="selection" id="selection-c" name="option3">(C)<?= $option3?></div>
         </div>
         <!--start to make the road-->
         <div class="container" id="container">
@@ -182,3 +220,7 @@
         <script type="text/javascript" src="carbutton.js"></script>
     </body>
 </html>
+  
+
+    
+

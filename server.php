@@ -1,5 +1,6 @@
 <?php
 session_start();
+include('dbconfig.php');
 
 //initializing variables
 $username = "";
@@ -12,11 +13,11 @@ $errors= array();
 if(isset($_POST['reg_user']))
 {
     //receive all input values from the form
-    $username = mysqli_real_escape_string($db, $_POST['username']);
-    $name = mysqli_real_escape_string($db, $_POST['name']);
-    $email = mysqli_real_escape_string($db, $_POST['email']);
-    $pseudo = mysqli_real_escape_string($db, $_POST['pseudo']);
-    $password = mysqli_real_escape_string($db, $_POST['password']);
+    $username = mysqli_real_escape_string($con, $_POST['username']);
+    $name = mysqli_real_escape_string($con, $_POST['name']);
+    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $pseudo = mysqli_real_escape_string($con, $_POST['pseudo']);
+    $password = mysqli_real_escape_string($con, $_POST['password']);
 
     //form validation: ensure that the form is correctly filled
     //by adding(array_push()) corresponding error unto $errors array
@@ -48,7 +49,7 @@ if(isset($_POST['reg_user']))
     //First check the database to make sure
     //A suer does not already exist with the same username and/or email
     $user_check_query = "SELECT * FROM users WHERE username='$username' OR email='$email' LIMIT 1";
-    $result = mysqli_query($db, $user_check_query);
+    $result = mysqli_query($con, $user_check_query);
     $user = mysqli_fetch_assoc($result);
 
     if($user)
@@ -70,13 +71,17 @@ if(isset($_POST['reg_user']))
     {
         //encrypt the password before saving in the database
         $password = md5($password);
-
-        $query = "INSERT INTO users(username, email, password)
-                  VALUES('$username', '$name', '$email', '$password')";
-        mysqli_query($db, $query);
+        $query = "INSERT INTO users(username, name, email, password, pseudo)
+                  VALUES('$username', '$name', '$email', '$password', '$pseudo')";
+        echo $query;
+        mysqli_query($con, $query);
+        mysqli_commit($con);
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "Vous êtes maintenant connecté";
-        header('location: quiz.html');
+        header('location: quiz.php');
 
+    }else
+    {
+        include('errors.php');
     }
 }
