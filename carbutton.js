@@ -24,3 +24,11 @@ window.addEventListener('keyup', (e) => {
     }
 
 });
+
+//Define car answer area
+let x = 0;
+
+function mouseMoveFunction()
+{
+    document.getElementsById("answer-a").innerHTML = x+=1;
+}

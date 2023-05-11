@@ -1,44 +1,27 @@
 <?php session_start(); ?>
 <?php
-    //Get questions
-    include('dbconfig.php');
-    $id = $_GET['id_questions'];
-    $result = mysqli_query($con,"SELECT phrase FROM questions WHERE id_questions = '$id'");
-    //$row = mysqli_fetch_assoc($result);
-    //$title = $row['phrase'];
-   
-    //Create a funtion or if to run random question
-    //$res = $con->query("SELECT id_questions FROM questions ORDER BY rand() LIMIT 10")
-    $sql = mysqli_query($con, "SELECT count(id_questions) FROM questions");  
-    $random = rand(0, $sql);
-    $sql1 = "SELECT * FROM questions WHERE id_questions = '$random'";
-    $resultRandom = mysqli_query($con,$sql1);
-    $row = mysqli_fetch_assoc($resultRandom);
-    $title = $row['phrase'];
-        /*$questions = array();
-        $questions_ids = array();
-        while($r = $res->fetch_assoc($result))
-        {
-            $questions[] = $r;
-            $questions_ids = $r[$id];
-            $title = $questions_ids['phrase'];
-        }*/
-   
+ //Get questions
+ include('dbconfig.php');
+ $id = $_GET['id_questions'];
 
-    //Get options A B C
-    //A URL:http://localhost:8888/fullstack/quiz.php?id_questions=1
-    $result1 = mysqli_query($con, "SELECT option1 FROM questions WHERE id_questions = '$id'");
-    $row1 = mysqli_fetch_assoc($result1);
-    $option1 = $row1['option1'];
-    //B
-    $result2 = mysqli_query($con, "SELECT option2 FROM questions WHERE id_questions = '$id'");
-    $row2 = mysqli_fetch_assoc($result2);
-    $option2 = $row2['option2'];
-    //c
-    $result3 = mysqli_query($con, "SELECT option3 FROM questions WHERE id_questions = '$id'");
-    $row3 = mysqli_fetch_assoc($result3);
-    $option3 = $row3['option3'];
-   
+ if(empty($id))
+ {
+    $sql = mysqli_query($con, "SELECT count(id_questions) AS sentence FROM questions");
+    $resultR = mysqli_fetch_assoc($sql);
+    $id = rand(1, $resultR['sentence']);
+ }
+
+
+ $question = "SELECT * FROM questions WHERE id_questions = '$id'";
+ $result = mysqli_query($con,$question);
+ $row = mysqli_fetch_assoc($result);
+
+ //Repond
+ /*if(repond est corr)
+ {
+    $score ++;
+ }*/
+
 ?>
 
 <!DOCTYPE html>
@@ -156,24 +139,28 @@
             } 
             /*Style answers*/
             .answer{
-             width: 3%;
-             height: 8vh;
-             margin-left: 95%;
+             width: 6%;
+             height: 10vh;
+             margin-left: 96%;
              bottom: 28%;
              background: pink;
              position: absolute;
              transform: translateX(-50%) rotate(-180deg);
-             font-size: 50px;
+             font-size: 60px;
             }
+            
             #answer-a{
-             top:25%;
+             top:80%;
             }
+
             #answer-b{
-             top: 50%;
+             top:45%;
             }
+
             #answer-c{
-             top: 75%;
+             top: 10%;
             } 
+
         </style>
         
     </head>
@@ -197,13 +184,12 @@
                 <span id="Pieces">0</span>
             </div>
         </div>
-
         <!--Quiz section-->
         <div class="section-quiz">
-            <div class="question" name="question"><?= $title;?></div>
-            <div class="selection" id="selection-a" name="option1">(A)<?= $option1?></div>
-            <div class="selection" id="selection-b" name="option2">(B)<?= $option2?></div>
-            <div class="selection" id="selection-c" name="option3">(C)<?= $option3?></div>
+            <div class="question" name="question"><?= $row['phrase']?></div>
+            <div class="selection" id="selection-a" name="option1">(A)<?= $row['option1']?></div>
+            <div class="selection" id="selection-b" name="option2">(B)<?= $row['option2']?></div>
+            <div class="selection" id="selection-c" name="option3">(C)<?= $row['option3']?></div>
         </div>
         <!--start to make the road-->
         <div class="container" id="container">
@@ -211,9 +197,9 @@
             <div class="line" id="line-2"></div>
             <div class="line" id="line-3"></div>
             <img src="photos/car1.png" class="carimg" alt="car">
-            <div class="answer" id="answer-a">A</div>
-            <div class="answer" id="answer-b">B</div>
-            <div class="answer" id="answer-c">C</div>
+            <div onmousemove="mouseMoveFunction()" class="answer" id="answer-a">A</div>
+            <div onmousemove="mouseMoveFunction()" class="answer" id="answer-b">B</div>
+            <div onmousemove="mouseMoveFunction()" class="answer" id="answer-c">C</div>
         </div>
         </form>
         <!--JavaScript-->
