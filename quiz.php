@@ -88,18 +88,18 @@
             }
             #selection-a{
              position: absolute;
-             left: 10%;   
-             top:50%;
+             left: 3%;   
+             top:40%;
             }
             #selection-b{
              position: absolute;
-             left: 50%; 
-             top:50%;
+             left: 38%; 
+             top:40%;
             }
             #selection-c{
              position: absolute;
-             left: 85%; 
-             top:50%; 
+             left: 73%; 
+             top:40%; 
             }
             /*Styling the road*/
             #container{
@@ -112,30 +112,49 @@
              position: absolute;
              transform: translateX(-50%) translateY(-50%) rotate(-180deg);
             }
+
             .line{
-                width: 3%;
-                height: 30vh;
-                margin-left: 90%;
-                bottom: 28%;
+                width: 10vw;
+                height: 3vw;
+                bottom: 43%;
                 background: white;
                 position: absolute;
-                transform: translateX(-50%) rotate(-90deg);
+                animation: moving 3s linear infinite 0.1s;
+            }
+
+            @keyframes moving
+            {
+                100%
+                {
+                    transform: translateX(-100vw);
+                }
+
             }
             /*Style the lines of road*/
             #line-1{
-             right:20%;
+             right:0%;
             }
             #line-2{
-             right:43%;
+             right:23%;
             }
             #line-3{
-             right:66%;
+             right:43%;
+            }
+            #line-4{
+             right:63%;
+            }
+            #line-5{
+             right:83%;
+            }
+            #line-6{
+             right:103%;
             }
             /*Style the car*/
             img{
               width: 25%;
               height: auto;
               transform: translateX(-8%)translateY(100%) rotate(-180deg);
+              position: absolute;
             } 
             /*Style answers*/
             .answer{
@@ -151,6 +170,10 @@
             
             #answer-a{
              top:80%;
+            }
+
+            #answer-a:hover {
+             background-color: blue;
             }
 
             #answer-b{
@@ -196,10 +219,14 @@
             <div class="line" id="line-1"></div>
             <div class="line" id="line-2"></div>
             <div class="line" id="line-3"></div>
+            <div class="line" id="line-4"></div>
+            <div class="line" id="line-5"></div>
+            <div class="line" id="line-6"></div>
             <img src="photos/car1.png" class="carimg" alt="car">
-            <div onmousemove="mouseMoveFunction()" class="answer" id="answer-a">A</div>
-            <div onmousemove="mouseMoveFunction()" class="answer" id="answer-b">B</div>
-            <div onmousemove="mouseMoveFunction()" class="answer" id="answer-c">C</div>
+            <div class="answer" id="answer-a">A</div>
+            <div class="answer" id="answer-b">B</div>
+            <div class="answer" id="answer-c">C</div>
+        </div>
         </div>
         </form>
         <!--JavaScript-->

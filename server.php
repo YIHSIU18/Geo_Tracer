@@ -78,7 +78,7 @@ if(isset($_POST['reg_user']))
         mysqli_commit($con);
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "Vous êtes maintenant connecté";
-        header('location: quiz.php');
+        header('location: acceuil.html');
 
     }else
     {
