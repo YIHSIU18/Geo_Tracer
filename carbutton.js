@@ -1,11 +1,11 @@
 let car1 = document.querySelector('.carimg');
+const canvas = document.querySelector('.container');
 let moveBy = 60;
-var answerA = document.getElementById("answer-a");
-var answerB = document.getElementById("answer-b");
-var answerC = document.getElementById("answer-c");
+var answers = document.getElementById('.answer');
+
 
 //making car moving
-window.addEventListener('load', () => {
+/*window.addEventListener('load', () => {
     car1.style.position = 'absolute';
     car1.style.left = 0;
     car1.style.top = 0;
@@ -13,7 +13,7 @@ window.addEventListener('load', () => {
 
 window.addEventListener('keyup', (e) => {
 
-    const canvas = document.querySelector('.container');
+    
     const canvasRect = canvas.getBoundingClientRect();
     const canvasWidth = canvasRect.width;
     const canvasHeight = canvasRect.height;
@@ -36,51 +36,39 @@ window.addEventListener('keyup', (e) => {
             car1.style.top = parseInt(car1.style.top) - moveBy + 'px';
             break;
         default:
-            return; //Ignorer les autres touches
+            return;
     }
- // Check if the new position exceeds the canvas boundaries
- car1.style.left = Math.max(0, Math.min(car1.style.left, canvasWidth - car1Width));
- car1.style.top = Math.max(0, Math.min(car1.style.top, canvasHeight - car1Height));
 
- car1.style.transform = `transate(${carX}px, ${carY}px)`;
+// Check if the new position exceeds the canvas boundaries
+car1.style.left = Math.max(0, Math.min(parseInt(car1.style.left), canvasWidth - car1Width)) + 'px';
+car1.style.top = Math.max(0, Math.min(parseInt(car1.style.top), canvasHeight - car1Height)) + 'px';
 
- checkCollisions();
-    
+});*/
+
+function allowDrop(ev)
+{
+    ev.preventDefault();
+}
+
+function drag(ev)
+{
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev)
+{
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var el = ev.target;
+    if(!el.classList.contains('dropzone'))
+    {
+        //choose answer
+        el = ev.target.parentNode;
+        ev.target.appendChild(document.getElementById(data));
+        document.getElementById("selectedAnswer").value = data;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    car1.addEventListener("dragstart", drag);
 });
-
-// Fonction pour vérifier les collisions entre la voiture et les objets de réponse
-function checkCollisions() {
-    const carRect = car1.getBoundingClientRect();
-    const answerARect = answerA.getBoundingClientRect();
-    const answerBRect = answerB.getBoundingClientRect();
-    const answerCRect = answerC.getBoundingClientRect();
-  
-    if (isColliding(carRect, answerARect)) {
-      // La voiture touche l'objet A
-      handleCollision(answerA);
-    } else if (isColliding(carRect, answerBRect)) {
-      // La voiture touche l'objet B
-      handleCollision(answerB);
-    } else if (isColliding(carRect, answerCRect)) {
-      // La voiture touche l'objet C
-      handleCollision(answerC);
-    }
-  }
-  
-  // Fonction pour vérifier si deux éléments se chevauchent
-  function isColliding(car1, answerA) {
-    return (
-        car1.left < answerA.right &&
-        car1.right > answerA.left &&
-        car1.top < answerA.bottom &&
-        car1.bottom > answerA.top
-    );
-  }
-  
-  // Fonction pour gérer les collisions avec les objets de réponse
-  function handleCollision(answerA) {
-    // Faites ce que vous voulez lorsque la voiture touche l'objet spécifié
-    const objectText = answerA.textContent;
-    const message = `La voiture a touché l'objet ${objectText}`;
-    communicationText.value = message;
-  }

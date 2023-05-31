@@ -16,11 +16,21 @@
  $result = mysqli_query($con,$question);
  $row = mysqli_fetch_assoc($result);
 
- //Repond
- /*if(repond est corr)
- {
-    $score ++;
- }*/
+ //Reponses
+ if($_SESSION['drop']>1)
+ { 
+	$answer = "SELECT `id_questions`, `reponses` FROM `questions`;";
+	$resultAnswer = mysqli_query($con,$answer);
+	$storeArray = Array();
+    $score = 0;
+	while ($rowA = mysqli_fetch_array($resultAnswer, MYSQLI_ASSOC)) 
+    {
+       if($rowA['reponses']==$row3['id_questions'])
+       {
+		  $score += 1 ;
+	   }
+    }
+ }
 
 ?>
 
@@ -172,10 +182,6 @@
              top:80%;
             }
 
-            #answer-a:hover {
-             background-color: blue;
-            }
-
             #answer-b{
              top:45%;
             }
@@ -198,8 +204,10 @@
             <div class="header-section-4"></div>
 
             <div class="header-section-5">
-                <span>Score :</span>
-                <span id="score">0</span>
+                <span>Score : </span>
+                <span id="score">
+                <?php  $score ?>
+                </span>
             </div>
 
             <div class="header-section-6">
@@ -222,10 +230,13 @@
             <div class="line" id="line-4"></div>
             <div class="line" id="line-5"></div>
             <div class="line" id="line-6"></div>
-            <img src="photos/car1.png" class="carimg" alt="car">
-            <div class="answer" id="answer-a">A</div>
-            <div class="answer" id="answer-b">B</div>
-            <div class="answer" id="answer-c">C</div>
+            <img src="photos/car1.png" class="carimg" id="carimg" alt="car" draggable="true" ondragstart="drag(event)" value="search" onchange="this.form.submit()">
+            <div class="answer" id="answer-a" ondrop="drop(event)" ondragover="allowDrop(event)"><?= $row['option1']?'A':'hidden';?></div>
+            <div class="answer" id="answer-b" ondrop="drop(event)" ondragover="allowDrop(event)"><?= $row['option2']?'B':'hidden';?></div>
+            <div class="answer" id="answer-c" ondrop="drop(event)" ondragover="allowDrop(event)"><?= $row['option3']?'C':'hidden';?></div>
+            
+            <input type="hidden" name="selectedAnswer" id="selectedAnswer">
+            <button type="submit">Submit</button>
         </div>
         </div>
         </form>

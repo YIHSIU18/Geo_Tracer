@@ -1,20 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-  
-
   <title>Registration</title>
   <style type="text/css">
 	
   body{
     display: flex;
     justify-content: center;
-     align-items: center;
-     font-family: 'Roboto', sans-serif;
-     
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
     background-image: url("photos/inscrip.jfif") ;
-    
     background-size:100%;
 }
 
@@ -29,15 +24,11 @@ form{
 form p.choose-email{
     text-align: center;
     color: white;
-    
-
 }
 
 form .input{
     display: flex;
     flex-direction: column;
-   
-
 }
 
 form .input input[type="email"], input[type ="password"]{
@@ -47,7 +38,6 @@ form .input input[type="email"], input[type ="password"]{
     background-color:white;
     margin-bottom: 0px;
     outline: none;
-
 }
 
 form p.header{
@@ -99,12 +89,9 @@ h2{
     font-weight:bold;
     text-align: center;
     text-transform: uppercase;
-    padding: -10px;
-
-    
-    
-      
+    padding: -10px;     
 }
+
 input{
     width: 220px;
     padding: 10px 10px;
@@ -113,17 +100,12 @@ input{
     border: none;
     border-radius: 20px;
     
-  
-
-    
 }
 
 header {
     max-width: 80%;
     margin-right: auto;
     margin-left: 100px;
-
-
 }
 
 nav{
@@ -133,8 +115,8 @@ nav{
     width: 100%;
     padding: 20px 0 10px;
     justify-items: center;
-
 }
+
 nav .logo{
     width: 90px;
     border-radius: 15px;
@@ -143,8 +125,6 @@ nav .logo{
 </style>
 </head>
 <body>
-  
-	
   <form method="post" action="server.php">
   	<?php include('errors.php'); ?>
             <header>
