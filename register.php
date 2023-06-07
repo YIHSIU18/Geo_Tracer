@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Registration</title>
-  <style type="text/css">
+<title>Registration</title>
+<style type="text/css">
 	
   body{
     display: flex;

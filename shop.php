@@ -1,3 +1,11 @@
+<?php session_start(); ?>
+<?php
+ include('dbconfig.php');
+ echo ($_POST['scroe']);
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -9,7 +17,7 @@
         <!--Header section-->
         <div class="header-section">
            <div class="header-section-1">Player</div>
-           <div class="header-section-2"></div>
+           <div class="header-section-2">Game</div>
            <div class="header-section-3">SHOP</div>
            <div class="header-section-4"></div>
            <div class="header-section-5">Piece(s)</div>

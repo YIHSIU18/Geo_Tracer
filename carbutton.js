@@ -1,49 +1,4 @@
-let car1 = document.querySelector('.carimg');
-const canvas = document.querySelector('.container');
-let moveBy = 60;
-var answers = document.getElementById('.answer');
-
-
-//making car moving
-/*window.addEventListener('load', () => {
-    car1.style.position = 'absolute';
-    car1.style.left = 0;
-    car1.style.top = 0;
-});
-
-window.addEventListener('keyup', (e) => {
-
-    
-    const canvasRect = canvas.getBoundingClientRect();
-    const canvasWidth = canvasRect.width;
-    const canvasHeight = canvasRect.height;
-
-    const car1Rect = car1.getBoundingClientRect();
-    const car1Width = car1Rect.width;
-    const car1Height = car1Rect.height;
-
-    switch(e.key){
-        case 'ArrowLeft':
-            car1.style.left = parseInt(car1.style.left) + moveBy + 'px';
-            break;
-        case 'ArrowRight':
-            car1.style.left = parseInt(car1.style.left) - moveBy + 'px';
-            break;
-        case 'ArrowUp':
-            car1.style.top = parseInt(car1.style.top) + moveBy + 'px';
-            break;
-        case 'ArrowDown':
-            car1.style.top = parseInt(car1.style.top) - moveBy + 'px';
-            break;
-        default:
-            return;
-    }
-
-// Check if the new position exceeds the canvas boundaries
-car1.style.left = Math.max(0, Math.min(parseInt(car1.style.left), canvasWidth - car1Width)) + 'px';
-car1.style.top = Math.max(0, Math.min(parseInt(car1.style.top), canvasHeight - car1Height)) + 'px';
-
-});*/
+var score = 0;
 
 function allowDrop(ev)
 {
@@ -55,20 +10,37 @@ function drag(ev)
     ev.dataTransfer.setData("text", ev.target.id);
 }
 
-function drop(ev)
+function drop(userValue)
 {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    var el = ev.target;
-    if(!el.classList.contains('dropzone'))
+    const rep = document.getElementById('rep').value;
+    if (userValue === rep){
+        score++;
+        document.getElementById('score').innerHTML = score;
+        
+    }else
     {
-        //choose answer
-        el = ev.target.parentNode;
-        ev.target.appendChild(document.getElementById(data));
-        document.getElementById("selectedAnswer").value = data;
+        window.alert('Wrong Answer');
+        //Reload the page to move to the next question
+        window.location.reload();
+       
+        
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    car1.addEventListener("dragstart", drag);
-});
+/*function updateScore(score)
+{
+    //Send an AJAX request to a PHP script to update the score on the server
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'quiz.php', true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onreadystatechanged = function()
+    {
+        if(xhr.readyState === 4 && xhr.status === 200)
+        {
+            console.log("Score updated!");
+        }
+    };
+    xhr.send('score=' + score);
+}*/
+
+

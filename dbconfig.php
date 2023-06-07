@@ -11,7 +11,7 @@ if(!$con)
 {
    echo "Connect failed: " . mysql_connect_error();
 }
-echo "connected succesfully!";
+//echo "connected succesfully!";
 }catch(Exception $e){
 echo $e->getMessage();
 }

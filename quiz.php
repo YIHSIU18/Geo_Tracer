@@ -3,34 +3,61 @@
  //Get questions
  include('dbconfig.php');
  $id = $_GET['id_questions'];
+ echo($_POST['rep']);
+ echo($_POST['formData']);
 
- if(empty($id))
- {
-    $sql = mysqli_query($con, "SELECT count(id_questions) AS sentence FROM questions");
-    $resultR = mysqli_fetch_assoc($sql);
-    $id = rand(1, $resultR['sentence']);
+ // Check if 'formData.rep' is not empty and call the 'scoring' function
+ if (!empty($_POST['formData'].rep)){
+    scoring($_POST['rep']);
  }
 
+// If 'id_questions' is empty, generate a random number between 1 and 10
+// Issue!!! The number of id_question has duplicated with this loop!!!
+if (empty($id)) {
+    $sql = mysqli_query($con, "SELECT COUNT(id_questions) AS sentence FROM questions");
+    $resultR = mysqli_fetch_assoc($sql);
+    $totalQuestions = $resultR['sentence'];
 
+    $id = rand(1, $totalQuestions);
+}
+
+// Fetch the question with the given 'id_questions'
  $question = "SELECT * FROM questions WHERE id_questions = '$id'";
  $result = mysqli_query($con,$question);
  $row = mysqli_fetch_assoc($result);
 
- //Reponses
- if($_SESSION['drop']>1)
- { 
-	$answer = "SELECT `id_questions`, `reponses` FROM `questions`;";
-	$resultAnswer = mysqli_query($con,$answer);
-	$storeArray = Array();
-    $score = 0;
-	while ($rowA = mysqli_fetch_array($resultAnswer, MYSQLI_ASSOC)) 
+//Add score++
+$score = isset($_POST['score']) ? $_POST['id_users'] : 0;
+
+function scoring($value){
+    global $score;
+    echo($value);
+    if($value == $row['reponses'])
     {
-       if($rowA['reponses']==$row3['id_questions'])
-       {
-		  $score += 1 ;
-	   }
+        $_SESSION['score'] += 1;
+        $score += 1;
+        $updateScore = $_POST['score'];
+        $idUsers = $_POST['id_users'];
+        $idUsers1 = substr($idUsers, 9);
+        //connect server to add score
+        $score = mysqli_real_escape_string($con, $updateScore);
+        $idUsers1 = mysqli_real_escape_string($con, $idUsers);
+
+        //insert into SQL query
+        $query = "INSERT INTO 'users' ('id_users', 'score') VALUES ('$idUsers', '$score') ON DUPLICATE KEY UPDATE `score`='$scores'";
+         echo $idUsers1;
+        // Execute the SQL query
+        $result = mysqli_query($con, $query);
+        if ($result) 
+        {
+           echo "Score updated successfully.";
+        } else 
+        {
+           echo "Error updating score: " . mysqli_error($con);
+        }
+
     }
- }
+}
 
 ?>
 
@@ -98,17 +125,17 @@
             }
             #selection-a{
              position: absolute;
-             left: 3%;   
+             left: 1%;   
              top:40%;
             }
             #selection-b{
              position: absolute;
-             left: 38%; 
+             left: 36%; 
              top:40%;
             }
             #selection-c{
              position: absolute;
-             left: 73%; 
+             left: 71%; 
              top:40%; 
             }
             /*Styling the road*/
@@ -189,25 +216,32 @@
             #answer-c{
              top: 10%;
             } 
+            
+            .next-questionbutton
+            {
+             margin-left: 100%;
+            }
 
+           .next-question
+           {
+             margin-left: 100%;
+           }
         </style>
         
     </head>
     <body>
         <link href="https://fonts.googleapis.com/css?family=Jo+Sans:400,600" rel="stylesheet">
         <!--Header section-->
-        <form action="reponses.php" method="post">
+        <form id="myForm" method="post"> <!-- add action?--> 
         <div class="header-section">
             <div class="header-section-1">Player</div>
-            <div class="header-section-2">SHOP</div>
+            <div class="header-section-2"><a href="shop.php">SHOP</a></div>
             <div class="header-section-3"></div>
             <div class="header-section-4"></div>
 
             <div class="header-section-5">
-                <span>Score : </span>
-                <span id="score">
-                <?php  $score ?>
-                </span>
+                <span>Score :<?= $row['score'] ?></span>
+                <span id="score"></span>
             </div>
 
             <div class="header-section-6">
@@ -217,10 +251,23 @@
         </div>
         <!--Quiz section-->
         <div class="section-quiz">
-            <div class="question" name="question"><?= $row['phrase']?></div>
+            <div class="question" id="question" name="question"><?= $row['phrase']?></div>
             <div class="selection" id="selection-a" name="option1">(A)<?= $row['option1']?></div>
             <div class="selection" id="selection-b" name="option2">(B)<?= $row['option2']?></div>
             <div class="selection" id="selection-c" name="option3">(C)<?= $row['option3']?></div>
+            <?php echo $row['id_questions']?>
+            <?php 
+               if ($id == $totalQuestions) {
+                echo '<div class="next-question">Game Over!</div>';
+                echo '<div class="country"><a href="acceuil.html">Play other game</a></div>';
+                exit;
+            } else {
+                // Display the next question button
+                echo '<form method="POST" action="quiz.php?id_questions='.($id+1).'">';
+                echo '<input class="next-questionbutton" type="submit" value="Next Question">';
+                echo '</form>';
+            }
+            ?>
         </div>
         <!--start to make the road-->
         <div class="container" id="container">
@@ -230,18 +277,21 @@
             <div class="line" id="line-4"></div>
             <div class="line" id="line-5"></div>
             <div class="line" id="line-6"></div>
-            <img src="photos/car1.png" class="carimg" id="carimg" alt="car" draggable="true" ondragstart="drag(event)" value="search" onchange="this.form.submit()">
-            <div class="answer" id="answer-a" ondrop="drop(event)" ondragover="allowDrop(event)"><?= $row['option1']?'A':'hidden';?></div>
-            <div class="answer" id="answer-b" ondrop="drop(event)" ondragover="allowDrop(event)"><?= $row['option2']?'B':'hidden';?></div>
-            <div class="answer" id="answer-c" ondrop="drop(event)" ondragover="allowDrop(event)"><?= $row['option3']?'C':'hidden';?></div>
-            
-            <input type="hidden" name="selectedAnswer" id="selectedAnswer">
-            <button type="submit">Submit</button>
+            <img src="photos/car1.png" class="carimg" id="carimg" alt="car" draggable="true" ondragstart="drag(event)" value="search">
+            <div class="answer" id="answer-a" ondragover="allowDrop(event)" ondrop="drop('<?= $row['option1']?>')"><?= $row['option1']?'A':'hidden';?></div>
+            <div class="answer" id="answer-b" ondragover="allowDrop(event)" ondrop="drop('<?= $row['option2']?>')"><?= $row['option2']?'B':'hidden';?></div>
+            <div class="answer" id="answer-c" ondragover="allowDrop(event)" ondrop="drop('<?= $row['option3']?>')"><?= $row['option3']?'C':'hidden';?></div>
+            <input type="hidden" id="rep" value="<?= $row['reponses'] ?>"></input>
         </div>
         </div>
         </form>
         <!--JavaScript-->
         <script type="text/javascript" src="carbutton.js"></script>
+        <script>
+            <?php include 'quiz.php'; ?>
+               var value = "<?php echo $value; ?>";
+
+        </script>
     </body>
 </html>
   
