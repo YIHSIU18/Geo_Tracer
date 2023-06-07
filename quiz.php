@@ -3,28 +3,21 @@
  //Get questions
  include('dbconfig.php');
  $id = $_GET['id_questions'];
+if(empty($_SESSION['questions'])) {
+    $questions = "SELECT * FROM questions";
+    $_SESSION['questions'] = mysqli_query($con,$questions);
+    $row = mysqli_fetch_assoc($_SESSION['questions']);
+}
+echo($row);
+echo($_SESSION['questions']);
  echo($_POST['rep']);
  echo($_POST['formData']);
+ 
 
  // Check if 'formData.rep' is not empty and call the 'scoring' function
  if (!empty($_POST['formData'].rep)){
     scoring($_POST['rep']);
  }
-
-// If 'id_questions' is empty, generate a random number between 1 and 10
-// Issue!!! The number of id_question has duplicated with this loop!!!
-if (empty($id)) {
-    $sql = mysqli_query($con, "SELECT COUNT(id_questions) AS sentence FROM questions");
-    $resultR = mysqli_fetch_assoc($sql);
-    $totalQuestions = $resultR['sentence'];
-
-    $id = rand(1, $totalQuestions);
-}
-
-// Fetch the question with the given 'id_questions'
- $question = "SELECT * FROM questions WHERE id_questions = '$id'";
- $result = mysqli_query($con,$question);
- $row = mysqli_fetch_assoc($result);
 
 //Add score++
 $score = isset($_POST['score']) ? $_POST['id_users'] : 0;
@@ -255,7 +248,7 @@ function scoring($value){
             <div class="selection" id="selection-a" name="option1">(A)<?= $row['option1']?></div>
             <div class="selection" id="selection-b" name="option2">(B)<?= $row['option2']?></div>
             <div class="selection" id="selection-c" name="option3">(C)<?= $row['option3']?></div>
-            <?php echo $row['id_questions']?>
+            
             <?php 
                if ($id == $totalQuestions) {
                 echo '<div class="next-question">Game Over!</div>';
