@@ -1,62 +1,90 @@
 <?php session_start(); ?>
 <?php
- //Get questions
- include('dbconfig.php');
- $id = $_GET['id_questions'];
-if(empty($_SESSION['questions'])) {
-    $questions = "SELECT * FROM questions";
-    $_SESSION['questions'] = mysqli_query($con,$questions);
-    $row = mysqli_fetch_assoc($_SESSION['questions']);
+//Get questions
+include('dbconfig.php');
+$response = !empty($_GET["response"]) ? htmlspecialchars($_GET["response"]) : null;
+$idQuestion = !empty($_GET["idQuestion"]) ? htmlspecialchars($_GET["idQuestion"]) : null;
+
+initVars();
+if (!empty($response) && !empty($idQuestion) && !in_array($idQuestion, $_SESSION['answeredQuestions'])) {
+    array_push($_SESSION['answeredQuestions'], $idQuestion);
+    scoring($response, $idQuestion, $con);
 }
-echo($row);
-echo($_SESSION['questions']);
- echo($_POST['rep']);
- echo($_POST['formData']);
- 
+if (count($_SESSION['answeredQuestions']) < 10) {
 
- // Check if 'formData.rep' is not empty and call the 'scoring' function
- if (!empty($_POST['formData'].rep)){
-    scoring($_POST['rep']);
- }
+    $notAnsweredQuestions = getQuestions($con, $_SESSION['answeredQuestions']);
+    $currentIdQuestion = getCurrentIdQuestion($notAnsweredQuestions);
 
-//Add score++
-$score = isset($_POST['score']) ? $_POST['id_users'] : 0;
+    $question = findQuestion($notAnsweredQuestions, $currentIdQuestion);
+} else {
+    save_score($con);
+}
 
-function scoring($value){
-    global $score;
-    echo($value);
-    if($value == $row['reponses'])
-    {
-        $_SESSION['score'] += 1;
-        $score += 1;
-        $updateScore = $_POST['score'];
-        $idUsers = $_POST['id_users'];
-        $idUsers1 = substr($idUsers, 9);
-        //connect server to add score
-        $score = mysqli_real_escape_string($con, $updateScore);
-        $idUsers1 = mysqli_real_escape_string($con, $idUsers);
-
-        //insert into SQL query
-        $query = "INSERT INTO 'users' ('id_users', 'score') VALUES ('$idUsers', '$score') ON DUPLICATE KEY UPDATE `score`='$scores'";
-         echo $idUsers1;
-        // Execute the SQL query
-        $result = mysqli_query($con, $query);
-        if ($result) 
-        {
-           echo "Score updated successfully.";
-        } else 
-        {
-           echo "Error updating score: " . mysqli_error($con);
+function findQuestion(mysqli_result $notAnsweredQuestions, int $currentIdQuestion)
+{
+    foreach ($notAnsweredQuestions as $question) {
+        if ($question['id_questions'] == $currentIdQuestion) {
+            return $question;
         }
-
     }
+}
+
+function getCurrentIdQuestion($notAnsweredQuestions)
+{
+    if (empty($chosenIdQuestion)) {
+        $chosenIndex = rand(1, mysqli_num_rows($notAnsweredQuestions));
+        $row = mysqli_fetch_assoc($notAnsweredQuestions);
+        $i = 1;
+        while ($i < $chosenIndex) {
+            $row = mysqli_fetch_assoc($notAnsweredQuestions);
+            $i++;
+        }
+        $chosenIdQuestion = $row['id_questions'];
+    }
+    return $chosenIdQuestion;
+}
+
+function getQuestions($con, $answeredQuestions)
+{
+    $questions = !empty($answeredQuestions) ? "SELECT * FROM questions where id_questions NOT IN(" . implode(',', $answeredQuestions) . ")" : "SELECT * FROM questions";
+    return mysqli_query($con, $questions);
+}
+
+function initVars()
+{
+    if (empty($_SESSION['score'])) {
+        $_SESSION['score'] = 0;
+    }
+    if (empty($_SESSION['answeredQuestions'])) {
+        $_SESSION['answeredQuestions'] = array();
+    }
+}
+
+function scoring($response, $idQuestion, $con)
+{
+    $goodAnswer = "SELECT * FROM questions where id_questions = " . $idQuestion;
+    $row = mysqli_fetch_assoc(mysqli_query($con, $goodAnswer));
+
+    if ($response == $row['reponses']) {
+        $_SESSION['score'] += 1;
+    }
+}
+
+//TODO save score in DB
+function save_score($con)
+{
+    $score = $_SESSION['score'];
+    //$id_user = $_SESSION['id_user'];
+    $id_user = 9;
+    $sql = "UPDATE users SET score = $score WHERE id_users = $id_user";
+    mysqli_query($con, $sql);
 }
 
 ?>
 
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
+<head>
         <title>Quiz</title>
         <meta charest="UTF-8">
         <!--
@@ -209,23 +237,15 @@ function scoring($value){
             #answer-c{
              top: 10%;
             } 
-            
-            .next-questionbutton
-            {
-             margin-left: 100%;
-            }
-
-           .next-question
-           {
-             margin-left: 100%;
-           }
+   
         </style>
         
     </head>
     <body>
         <link href="https://fonts.googleapis.com/css?family=Jo+Sans:400,600" rel="stylesheet">
         <!--Header section-->
-        <form id="myForm" method="post"> <!-- add action?--> 
+<?php if (count($_SESSION['answeredQuestions']) < 10) { ?>
+<form id="myForm" method="post"> <!-- add action?-->
         <div class="header-section">
             <div class="header-section-1">Player</div>
             <div class="header-section-2"><a href="shop.php">SHOP</a></div>
@@ -233,34 +253,18 @@ function scoring($value){
             <div class="header-section-4"></div>
 
             <div class="header-section-5">
-                <span>Score :<?= $row['score'] ?></span>
-                <span id="score"></span>
+                <span>Score : <?php echo $_SESSION['score'] ?> / <?php echo count($_SESSION['answeredQuestions']) ?></span>
             </div>
 
-            <div class="header-section-6">
-                <span>Piece(s) :</span>
-                <span id="Pieces">0</span>
-            </div>
+            <div class="header-section-6"></div>
         </div>
         <!--Quiz section-->
         <div class="section-quiz">
-            <div class="question" id="question" name="question"><?= $row['phrase']?></div>
-            <div class="selection" id="selection-a" name="option1">(A)<?= $row['option1']?></div>
-            <div class="selection" id="selection-b" name="option2">(B)<?= $row['option2']?></div>
-            <div class="selection" id="selection-c" name="option3">(C)<?= $row['option3']?></div>
-            
-            <?php 
-               if ($id == $totalQuestions) {
-                echo '<div class="next-question">Game Over!</div>';
-                echo '<div class="country"><a href="acceuil.html">Play other game</a></div>';
-                exit;
-            } else {
-                // Display the next question button
-                echo '<form method="POST" action="quiz.php?id_questions='.($id+1).'">';
-                echo '<input class="next-questionbutton" type="submit" value="Next Question">';
-                echo '</form>';
-            }
-            ?>
+            <div class="question" id="question"><?= $question['phrase'] ?></div>
+            <div class="selection" id="selection-a">(A)<?= $question['option1'] ?></div>
+            <div class="selection" id="selection-b">(B)<?= $question['option2'] ?></div>
+            <div class="selection" id="selection-c">(C)<?= $question['option3'] ?></div>
+            <?php echo $question['id_questions'] ?>
         </div>
         <!--start to make the road-->
         <div class="container" id="container">
@@ -270,24 +274,24 @@ function scoring($value){
             <div class="line" id="line-4"></div>
             <div class="line" id="line-5"></div>
             <div class="line" id="line-6"></div>
-            <img src="photos/car1.png" class="carimg" id="carimg" alt="car" draggable="true" ondragstart="drag(event)" value="search">
-            <div class="answer" id="answer-a" ondragover="allowDrop(event)" ondrop="drop('<?= $row['option1']?>')"><?= $row['option1']?'A':'hidden';?></div>
-            <div class="answer" id="answer-b" ondragover="allowDrop(event)" ondrop="drop('<?= $row['option2']?>')"><?= $row['option2']?'B':'hidden';?></div>
-            <div class="answer" id="answer-c" ondragover="allowDrop(event)" ondrop="drop('<?= $row['option3']?>')"><?= $row['option3']?'C':'hidden';?></div>
-            <input type="hidden" id="rep" value="<?= $row['reponses'] ?>"></input>
+            <img src="photos/car1.png" class="carimg" id="carimg" alt="car" draggable="true" ondragstart="drag(event)">
+            <div class="answer" id="answer-a" ondragover="allowDrop(event)"
+                 ondrop="drop('<?= $question['option1'] ?>', <?= $currentIdQuestion ?>)"><?= $question['option1'] ? 'A' : 'hidden'; ?></div>
+            <div class="answer" id="answer-b" ondragover="allowDrop(event)"
+                 ondrop="drop('<?= $question['option2'] ?>', <?= $currentIdQuestion ?>)"><?= $question['option2'] ? 'B' : 'hidden'; ?></div>
+            <div class="answer" id="answer-c" ondragover="allowDrop(event)"
+                 ondrop="drop('<?= $question['option3'] ?>', <?= $currentIdQuestion ?>)"><?= $question['option3'] ? 'C' : 'hidden'; ?></div>
+            <input type="hidden" id="rep" value="<?= $question['reponses'] ?>"/>
         </div>
-        </div>
-        </form>
-        <!--JavaScript-->
-        <script type="text/javascript" src="carbutton.js"></script>
-        <script>
-            <?php include 'quiz.php'; ?>
-               var value = "<?php echo $value; ?>";
+</form>
+<?php } else { ?>
 
-        </script>
-    </body>
+        <div>Game Over!</div>
+        <div>Votre score : <?= $_SESSION['score'] ?></div>
+        <div class="country"><a href="acceuil.html">Play other game</a></div>
+<?php
+} ?>
+<!--JavaScript-->
+<script type="text/javascript" src="carbutton.js"></script>
+</body>
 </html>
-  
-
-    
-

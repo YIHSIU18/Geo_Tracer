@@ -47,7 +47,7 @@ if(isset($_POST['reg_user']))
     }
 
     //First check the database to make sure
-    //A suer does not already exist with the same username and/or email
+    //A user does not already exist with the same username and/or email
     $user_check_query = "SELECT * FROM users WHERE username='$username' OR email='$email' LIMIT 1";
     $result = mysqli_query($con, $user_check_query);
     $user = mysqli_fetch_assoc($result);
@@ -68,12 +68,12 @@ if(isset($_POST['reg_user']))
 
     //Finally, register user if there are no errors in the form
     if(count($errors) == 0)
-    {
+    { 
         //encrypt the password before saving in the database
         $password = md5($password);
-        $query = "INSERT INTO users(username, name, email, password, pseudo)
-                  VALUES('$username', '$name', '$email', '$password', '$pseudo')";
-        echo $query;
+        $query = "INSERT INTO users(username, name, email, password, pseudo, score)
+                  VALUES('$username', '$name', '$email', '$password', '$pseudo', 0)";
+        //echo $query;
         mysqli_query($con, $query);
         mysqli_commit($con);
         $_SESSION['username'] = $username;
@@ -85,3 +85,4 @@ if(isset($_POST['reg_user']))
         include('errors.php');
     }
 }
+

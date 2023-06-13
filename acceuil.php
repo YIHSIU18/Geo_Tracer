@@ -116,12 +116,18 @@ div{
 </style>
 <body>
     <header>
+    <!--<?php
+        session_start();
+        if(!isset($_SESSION["sess_user"])){
+             header("location:login.php");
+        } else {
+        ?>-->
         <nav>
             <a href="#"><img src="photos/geo tracer-3.png" alt=""class="logo"> </a>
             <ul>
                 
                 <li><a href="#">Acceuil</a></li> 
-                <li><a href="#"> <a href="http://127.0.0.1:5500/connexion.html">Mon compte</a> </a></li>
+                <li><?= $_SESSION['sess_user'] ?></li>
                 <li><a href="#">Shop</a></li>
                 
                 <li><a href="#">A propos</a></li>    
@@ -139,7 +145,7 @@ div{
         </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>  
-    <script>
+    <!--<script>
         let typed =new typed('.auto-typing',{
             strings:["Culture","Loisir","Voyage","3 en 1"],
             typespeed: 100,
@@ -148,11 +154,13 @@ div{
             fadeout:true,
             fadeOutClass:'typed-fade-out',
             fadeOutDelay:500,
-
-
         })
 
-    </script>
+    </script>-->
 </body>
 
 </html>
+
+<!--<?php
+}
+?>-->

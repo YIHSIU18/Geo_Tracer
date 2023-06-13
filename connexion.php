@@ -1,3 +1,49 @@
+<?php
+session_start();
+include('dbconfig.php');
+
+//initializing variables
+$password = "";
+$email = "";
+$errors= array();
+
+//se connecter
+if(isset($_POST['connect_user']))
+{
+
+    $email = mysqli_real_escape_string($con, $_POST['email']);
+    $password = mysqli_real_escape_string($con, $_POST['password']);
+
+    //check if email and password aren't empty
+    if(empty($email))
+    {
+        array_push($errors, "Email est nécessaire");
+    } 
+
+    if(empty($password))
+    {
+        array_push($errors, "Mot de passe est nécessaire");
+    }
+
+    if(isset($_POST['email']) && isset($_POST['password']))
+    {
+        function validate($data)
+        {
+            //removes whitespace and other predefined characters from both sides of a string
+            $data = trim($data);
+
+            $data = stripslashes($data);
+     
+            $data = htmlspecialchars($data);
+     
+            return $data;
+        }
+    }
+
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -101,36 +147,27 @@ nav .logo{
     width: 90px;
     border-radius: 15px;
 }
-    </style>
-    
-    
+</style>
+       
 <body>
-    <form>
+    <form method="POST" action="">
+    <?php include('errors.php'); ?>
         <header>
             <nav>
                <a href="index.html"><img src="photos/geo tracer-3.png" alt=""class="logo" srcset=""></a>
-              
-   
             </nav>
-   
          </header>
-        <h1>Se Connecter</h1> 
-        
+        <h1>Se Connecter</h1>    
         </div>
         <p class="choose-email"> utilisez votre adresse e-mail</p>
-
         <div class="input">
-           
-            <input type="email"placeholder="exemple.xx@gmail.com">
-            <input type="password"placeholder="Mot de passe">
+            <input type="email" placeholder="exemple.xx@gmail.com" value="<?php echo $email; ?>">
+            <input type="password" placeholder="Mot de passe" value="<?php echo $password; ?>">
         </div>
-        <p class="inscription "> Vous n'avez pas de compte?<a href="http://localhost:8888/fullstack/register.php">inscrivez-vous</a></p>
-        
+        <p class="inscription "> Vous n'avez pas de compte?<a href="http://localhost:8888/fullstack/register.php">inscrivez-vous</a></p>  
         <div align="center">
-            <button type="submit">Se connecter</button>
-            
+            <button type="submit" name="connect_user">Se connecter</button>       
         </div>
-    </form>
-    
+    </form>   
 </body>
 </html>
