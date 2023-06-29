@@ -83,201 +83,269 @@ function save_score($con)
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>Quiz</title>
-    <meta charest="UTF-8">
-    <!--
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    -->
-    <style type="text/css">
-        body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            background: white;
-            font-family: 'Josefin Sans', sans-serif;
-            background-position: center center;
-        }
+<title>Quiz</title>
+<meta charest="UTF-8">
+<style type="text/css">
+body {
+    height: 100%;
+    width:100%;
+    margin:0;
+    background: white;
+    font-family: 'Josefin Sans', sans-serif;
+    background-position: center center;
+ }
+/*Styling the Quiz*/
+.section-quiz {
+text-align: center;
+}
 
-        /*Styling the player*/
-        .header-section {
-            display: flex;
-            flex-wrap: wrap;
-        }
+.question {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
 
-        /*Styling the section*/
-        .header-section > div {
-            width: calc(100% / 6);
-            color: #000;
-        }
+.selection-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
 
-        .header-section-1 {
-            text-align: center;
-            font-size: 30px;
-        }
+.selection {
+  display: inline-block;
+  margin: 0 10px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-        .header-section-2 {
-            text-align: left;
-            font-size: 30px;
-        }
+.selection:hover {
+  background-color: gold;
+}
 
-        .header-section-5 {
-            text-align: center;
-            font-size: 30px;
-        }
+/*Styling the road*/
+#container {
+    width: 100%;
+    height: 70vh;
+    left: 50%;
+    top: 70%;
+    background:grey;
+    overflow: hidden;
+    position: absolute;
+    transform: translateX(-50%) translateY(-50%) rotate(-180deg);
+}
 
-        .header-section-6 {
-            text-align: center;
-            font-size: 30px;
-        }
+.line {
+    width: 10vw;
+    height: 3vw;
+    bottom: 43%;
+    background: white;
+    position: absolute;
+    animation: moving 5s linear infinite;
+}
 
-        /*Styling the Quiz*/
-        .section-quiz {
-            position: absolute;
-            margin-top: 6%;
-            margin-left: 20%;
-            box-shadow: 4px 4px 4px 1px #808080;
-            -webkit-box-shadow: 4px 4px 4px 1px #808080;
-            width: 900px;
-            height: 60px;
-            box-sizing: border-box;
-        }
+@keyframes moving {
+    0% {
+      right: 0%;
+    }
+    100% {
+      right: 100%;
+    }
+}
 
-        .question {
-            text-align: center;
-        }
+/* Style des lignes de la route */
+#line-1 {
+ animation-delay: 1s;
+}
 
-        #selection-a {
-            position: absolute;
-            left: 1%;
-            top: 40%;
-        }
+#line-2 {
+ animation-delay: 2s;
+}
 
-        #selection-b {
-            position: absolute;
-            left: 36%;
-            top: 40%;
-        }
+#line-3 {
+ animation-delay: 3s;
+}
 
-        #selection-c {
-            position: absolute;
-            left: 71%;
-            top: 40%;
-        }
+#line-4 {
+ animation-delay: 4s;
+}
 
-        /*Styling the road*/
-        #container {
-            width: 100%;
-            height: 80vh;
-            left: 50%;
-            top: 70%;
-            background: grey;
-            overflow: hidden;
-            position: absolute;
-            transform: translateX(-50%) translateY(-50%) rotate(-180deg);
-        }
+#line-5 {
+ animation-delay: 5s;
+}
 
-        .line {
-            width: 10vw;
-            height: 3vw;
-            bottom: 43%;
-            background: white;
-            position: absolute;
-            animation: moving 3s linear infinite 0.1s;
-        }
+#line-6 {
+ animation-delay: 5s;
+}
+/*Style the car*/
+img{
+width: 25%;
+height: auto;
+transform: translateX(-8%)translateY(100%) rotate(-180deg);
+position: absolute;
+} 
+/*Style answers*/
+.answer{
+width: 6%;
+height: 10vh;
+margin-left: 96%;
+bottom: 28%;
+background: red;
+position: absolute;
+transform: translateX(-50%) rotate(-180deg);
+font-size: 60px;
+}
+            
+#answer-a{
+top:80%;
+}
 
-        @keyframes moving {
-            100% {
-                transform: translateX(-100vw);
-            }
+#answer-b{
+top:45%;
+}
 
-        }
+#answer-c{
+top: 10%;
+} 
 
-        /*Style the lines of road*/
-        #line-1 {
-            right: 0%;
-        }
+nav {
+display:flex;
+flex-wrap: wrap;
+margin-top: 10px;
+align-items: center;
+width: 100%;
+padding: 5px 0 5px;
+background-color: rgb(22, 77, 144); 
+}
 
-        #line-2 {
-            right: 23%;
-        }
+nav .logo {
+    width: 60px;
+    border-radius: 20PX;
+    margin-left:10px ;
+}
+nav .menu-icon {
+    width: 60px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+nav ul {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 40px;
+}
 
-        #line-3 {
-            right: 43%;
-        }
+nav ul li{
+    list-style: none;
+    margin-left: 20px;
+}
 
-        #line-4 {
-            right: 63%;
-        }
+nav ul li a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-size: 1.2rem;
+    transition: color .3s;
+}
 
-        #line-5 {
-            right: 83%;
-        }
+nav ul li a:hover {
+    color:rgb(12, 169, 104);
 
-        #line-6 {
-            right: 103%;
-        }
+}
 
-        /*Style the car*/
-        img {
-            width: 25%;
-            height: auto;
-            transform: translateX(-8%) translateY(100%) rotate(-180deg);
-            position: absolute;
-        }
+.aide{
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 30px;
+color: red;
+}
 
-        /*Style answers*/
-        .answer {
-            width: 6%;
-            height: 10vh;
-            margin-left: 96%;
-            bottom: 28%;
-            background: pink;
-            position: absolute;
-            transform: translateX(-50%) rotate(-180deg);
-            font-size: 60px;
-        }
+.score {
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: #f2f2f2;
+padding: 10px;
+border-radius: 5px;
+font-size: 24px;
+font-weight: bold;
+color: red;
+}
 
-        #answer-a {
-            top: 80%;
-        }
+.score span {
+margin-right: 10px;
+}
 
-        #answer-b {
-            top: 45%;
-        }
+.game-over {
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+height: 100vh;
+background-color: #f44336;
+color: white;
+font-family: Arial, sans-serif;
+font-size: 24px;
+text-align: center;
+}
 
-        #answer-c {
-            top: 10%;
-        }
+.fin {
+font-size: 36px;
+font-weight: bold;
+margin-bottom: 20px;
+text-transform: uppercase;
+}
 
-    </style>
+.score_fin {
+font-size: 28px;
+margin-bottom: 30px;
+}
 
+.play-again a {
+color: white;
+text-decoration: none;
+background-color: #4CAF50;
+padding: 12px 30px;
+border-radius: 4px;
+transition: background-color 0.3s;
+font-size: 20px;
+font-weight: bold;
+}
+
+.play-again a:hover {
+background-color: #45a049;
+}
+        
+</style>
 </head>
 <body>
-<link href="https://fonts.googleapis.com/css?family=Jo+Sans:400,600" rel="stylesheet">
 <!--Header section-->
+<header>
+    <nav>
+        <ul>
+            <li><a href="acceuil.php">Accueil</a></li> 
+            <li><a href="connexion.html">Mon compte</a></li>
+            <li><a href="shop.php">Shop</a></li>
+            <li><a href="apropos.html">A propos</a></li>    
+        </ul>   
+    </nav>
+        <div class="score">
+            <span>Score : <?php echo $_SESSION['scoreFrance'] ?> / <?php echo count($_SESSION['answeredQuestions']) ?></span>
+        </div>
+</header>
+<link href="https://fonts.googleapis.com/css?family=Jo+Sans:400,600" rel="stylesheet">
 <?php if (count($_SESSION['answeredQuestions']) < 10) { ?>
     <form id="myForm" method="post">
-        <div class="header-section">
-            <div class="header-section-1">Player</div>
-            <div class="header-section-2"><a href="shop.php">SHOP</a></div>
-            <div class="header-section-3"></div>
-            <div class="header-section-4"></div>
-
-            <div class="header-section-5">
-                <span>Score : <?php echo $_SESSION['scoreFrance'] ?> / <?php echo count($_SESSION['answeredQuestions']) ?></span>
-            </div>
-
-            <div class="header-section-6"></div>
-        </div>
         <!--Quiz section-->
         <div class="section-quiz">
             <div class="question" id="question"><?= $question['phrase'] ?></div>
             <div class="selection" id="selection-a">(A)<?= $question['option1'] ?></div>
             <div class="selection" id="selection-b">(B)<?= $question['option2'] ?></div>
-            <div class="selection" id="selection-c">(C)<?= $question['option3'] ?></div>
-            
+            <div class="selection" id="selection-c">(C)<?= $question['option3'] ?></div>    
         </div>
-        <!--start to make the road-->
+        <p class="aide">Conduisez votre voiture jusqu'à la bonne réponse</p>
+        <!--Road section-->
         <div class="container" id="container">
             <div class="line" id="line-1"></div>
             <div class="line" id="line-2"></div>
@@ -296,10 +364,11 @@ function save_score($con)
         </div>
     </form>
 <?php } else { ?>
-
-    <div>Game Over!</div>
-    <div>Votre score : <?= $_SESSION['scoreFrance'] ?></div>
-    <div class="country"><a href="acceuil.php">Play other game</a></div>
+    <div class="game-over">
+    <div class="fin">Fin de jeu !</div>
+    <div class="score_fin">Votre score : <?= $_SESSION['scoreFrance'] ?></div>
+    <div class="play-again"><a href="acceuil.php">Jouer à un autre jeu</a></div>
+    </div>
     <?php
 } ?>
 <!--JavaScript-->

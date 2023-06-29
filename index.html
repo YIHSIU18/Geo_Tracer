@@ -3,19 +3,61 @@
     <head>
         <title>Geo Tracer</title>
         <meta charest="UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/style.css">
-    </head>
-    <body>
-   
-     <div class="title">
-         <h1>Geo Tracer</h1>
-         <a target="_blank" href="http:codepen.io/Moslim/" class="white-mode"></a>
-     </div>
-     <div id="login"></div>
-     <div class="worldmap">
-        <img src="photos/worldmap.png" alt="Worldmap" class="rotate"/>
-        <img src="photos/car1.png" alt="car1worldmap" class="car1worldmap"/>
-        <button class="btnworldmap">SE CONNECTEZ </button>
-     </div>
-    </body>
-</html>
+        <style>
+            body {
+              background-image:url("photos/index.png");
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+            
+            }
+        
+            .container {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              height: 100vh;
+            }
+        
+            .logo {
+              width: 200px;
+              height: 200px;
+              margin-bottom: 60px;
+            }
+        
+            .title {
+              font-size: 32px;
+              font-weight: bold;
+              color: #333;
+              margin-bottom: 20px;
+            }
+        
+            .btn {
+              display: inline-block;
+              padding: 12px 24px;
+              font-size: 18px;
+              font-weight: bold;
+              text-transform: uppercase;
+              color: #fff;
+              background-color: rgb(27, 30, 199);
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+            }
+        
+            .btn:hover {
+              background-color: rgb(27, 30, 199);
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <img src="photos/terre.png" alt="GeoTracer" class="logo">
+            <h1 class="title">BIENVENUE </h1>
+            <a href="connexion.html" class="btn">Connexion</a>
+            
+          </div>
+        </body>
+        </html>

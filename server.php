@@ -71,14 +71,14 @@ if(isset($_POST['reg_user']))
     { 
         //encrypt the password before saving in the database
         $password = md5($password);
-        $query = "INSERT INTO users(username, name, email, password, pseudo, score)
-                  VALUES('$username', '$name', '$email', '$password', '$pseudo', 0)";
+        $query = "INSERT INTO users(username, name, email, password, pseudo, score_france, pieces)
+                  VALUES('$username', '$name', '$email', '$password', '$pseudo', 0, 0)";
         //echo $query;
         mysqli_query($con, $query);
         mysqli_commit($con);
         $_SESSION['username'] = $username;
         $_SESSION['success'] = "Vous êtes maintenant connecté";
-        header('location: acceuil.html');
+        header('location: acceuil.php');
 
     }else
     {

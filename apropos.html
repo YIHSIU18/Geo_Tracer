@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation de notre Web Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: rgb(22, 77, 144);
+            padding: 20px;
+            text-align: center;
+        }
+nav .logo {
+    width: 60px;
+    border-radius: 20PX;
+    margin-left:10px ;
+}
+nav .menu-icon {
+    width: 60px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+nav ul {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 95%;
+    
+}
+
+nav ul li{
+    list-style: none;
+    margin-left: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-size: 1.2rem;
+    transition: color .3s;
+}
+
+nav ul li a:hover {
+    color:rgb(12, 169, 104);
+
+}
+        h1 {
+            margin: 0;
+        }
+        main {
+            padding: 40px;
+            text-align: center;
+        }
+        .app-description {
+            margin-bottom: 40px;
+        }
+        .team-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .team-member {
+            width: 200px;
+            margin: 20px;
+        }
+        .team-member img {
+            width: 100%;
+            border-radius: 50%;
+        }
+        .team-member h3 {
+            margin: 10px 0;
+        }
+        .team-member p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="acceuil.php">Accueil</a></li>   
+            </ul>   
+        </nav>
+        <h1>Notre Geo Tracer</h1>
+        <p>Une application web qui aide les enfant a mieux connaitre la geographie d'une maniere amusante</p>
+    </header>
+    <main>
+        <h2>Notre Groupe</h2>
+        <div class="team-section">
+            <div class="team-member">
+                <img src="photos/photographie d’identité.jpg" alt="Photo Membre 1">
+                <h3>AKLI Lounes</h3>
+                <p>Front-End et Back-End</p>
+            </div>
+            <div class="team-member">
+                <img src="photos/yihsiu.jpg" alt="Photo Membre 2">
+                <h3>Yishui</h3>
+                <p>Front-end et Back-end</p>
+            </div>
+            <div class="team-member">
+                <img src="photos/Photo Alternance.jpg" alt="Photo Membre 3">
+                <h3>Max Hazard</h3>
+                <p>Chef De Projet</p>
+            </div>
+            <div class="team-member">
+                <img src="photos/Photo Cl‚ment.jpg" alt="Photo Membre 3">
+                <h3>clement</h3>
+                <p>Marketing Rédacteur</p>
+            </div>
+            <!-- Ajoutez les autres membres de l'équipe ici -->
+        </div>
+    </main>
+</body>
+</html>

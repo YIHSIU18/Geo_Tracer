@@ -135,14 +135,14 @@ nav .logo{
        
              </header>
   <div class="header">
-  	<h2>Register</h2>
+  	<h2>Inscription</h2>
 
   	<div class="form1">
-  	  <label>Username</label>
+  	  <label>Prénom</label>
   	  <input type="text" name="username" value="<?php echo $username; ?>">
   	</div><br>
 	  <div class="form1">
-  	  <label>Name</label>
+  	  <label>Nom</label>
   	  <input type="text" name="name" value="<?php echo $name; ?>">
   	</div><br>
   	<div class="form1">
@@ -154,14 +154,14 @@ nav .logo{
   	  <input type="text" name="pseudo" value="<?php echo $pseudo; ?>">
   	</div><br>
 	  <div class="form1">
-  	  <label>Password</label>
+  	  <label>Mot De Passe</label>
   	  <input type="text" name="password" value="<?php echo $password; ?>">
   	</div><br>
   	<div class="form1">
-  	  <button type="submit" class="btn" name="reg_user">Register</button>
+  	  <button type="submit" class="btn" name="reg_user">S'inscrire</button>
   	</div>
   	<p>
-  		Already a member? <a href="connexion.html">Sign in</a>
+  		Déjà membre? <a href="connexion.html">Se Connecter</a>
   	</p>
   </form>
 </body>

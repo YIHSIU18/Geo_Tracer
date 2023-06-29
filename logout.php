@@ -2,5 +2,5 @@
 session_start();
 
 $_SESSION['user'] = null;
-header('Location: acceuil.php');
+header('Location: connexion.html');
 ?>
