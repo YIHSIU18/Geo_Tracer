@@ -283,7 +283,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 height: 100vh;
-background-color: #f44336;
+background-color: #f5f7f7;
 color: white;
 font-family: Arial, sans-serif;
 font-size: 24px;
